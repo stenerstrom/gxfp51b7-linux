@@ -2,8 +2,10 @@
 import json
 import os
 from pathlib import Path
+import stat
 import subprocess
 import tempfile
+from types import SimpleNamespace
 import unittest
 from unittest.mock import patch
 import integrate_pam as integration
@@ -117,11 +119,13 @@ class PlanTests(unittest.TestCase):
             return actual_atomic(path, data, mode)
         real_regular = integration.regular
         def regular(path):
-            data, info = real_regular(path)
-            if str(path).startswith(('/usr/lib/security/', '/usr/bin/omarchy-')):
-                values = list(info); values[4] = 0
-                info = os.stat_result(values)
-            return data, info
+            prerequisites = {Path('/usr/lib/security') / module for module in
+                             ('pam_fprintd.so', 'pam_faillock.so', 'pam_exec.so')}
+            prerequisites.add(Path('/usr/bin/omarchy-hw-laptop-closed'))
+            if path in prerequisites:
+                return b'synthetic protected prerequisite', SimpleNamespace(
+                    st_uid=0, st_mode=stat.S_IFREG | 0o644)
+            return real_regular(path)
         with patch.object(integration, 'atomic_file', side_effect=atomic), \
                 patch.object(integration, 'regular', side_effect=regular):
             with self.assertRaisesRegex(OSError, 'interrupted'):
