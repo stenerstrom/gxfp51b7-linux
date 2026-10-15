@@ -1,0 +1,13 @@
+{
+  "libfprint": {
+    "tag": "v1.94.100",
+    "url": "https://gitlab.freedesktop.org/libfprint/libfprint/-/archive/v1.94.100/libfprint-v1.94.100.tar.gz",
+    "sha256": "edc90e02f330a7595ceaf37f2c6ec32ed43541347fe936d3273b0bb2524fd19c",
+    "license": "LGPL-2.1-or-later"
+  },
+  "intel_headers": {
+    "version": "2.25",
+    "url": "https://github.com/intel/linux-sgx/tree/sgx_2.25/common/inc",
+    "license": "BSD-3-Clause"
+  }
+}

@@ -1,0 +1,32 @@
+[Unit]
+Description=Goodix ChicagoHS original Engine backend
+Before=fprintd.service
+ConditionPathExists=/dev/sgx_vepc
+ConditionPathExists=/sys/bus/platform/devices/GXFP51B7:00
+
+[Service]
+Type=notify
+NotifyAccess=main
+ExecStart=/usr/bin/python3 -B /opt/gxfp51b7/current/native-sgx/engine_backend.py
+Environment=GXFP51B7_SERVICE=1
+Environment=PYTHONDONTWRITEBYTECODE=1
+RuntimeDirectory=gxfp51b7-engine
+RuntimeDirectoryMode=0700
+UMask=0077
+Restart=on-failure
+RestartSec=3
+TimeoutStartSec=120
+TimeoutStopSec=180
+KillMode=mixed
+LimitCORE=0
+NoNewPrivileges=yes
+ProtectSystem=strict
+ProtectHome=yes
+PrivateTmp=yes
+ProtectControlGroups=yes
+ProtectClock=yes
+RestrictRealtime=yes
+RestrictSUIDSGID=yes
+RestrictAddressFamilies=AF_UNIX AF_NETLINK
+CapabilityBoundingSet=CAP_SYS_ADMIN CAP_SYS_MODULE CAP_SETUID CAP_SETGID
+

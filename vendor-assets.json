@@ -1,0 +1,51 @@
+{
+  "schema": 1,
+  "packages": {
+    "goodix": {
+      "version": "1.1.151.18",
+      "title": "MateBook_X_Pro_2020_FingerPrint_1.1.151.18.zip",
+      "url": "https://consumer-tkbdownload.huawei.com/ctkbfm/servlet/download/downloadServlet/H4sIAAAAAAAA_z2QwWrDMBBE_0XnEHaltWT3FFuJoYc2BqfQm5ErJRVN7aDILU3pv1empix7eMzsMsw3m64uHL4ujt0xzlbMjp_DgjLh0Z_do3mf8cFEV43jW_fcNWHsOHDoaj-cXGiCH2KH6zRZ2nx985fltjHxdf6cGyldb3nPgawSvZAcjeKFOhbIlUnu3t_ubbK2-02LEpA4FZhvEAAoyS_BmejH4eDnMMlQkACCWV6xqz8NJk5hjgllmUOtKYMqg1Ir1Dsut7hDqEmrrSASIpeaBMeaFFQgyqrQGehMKpBS_UVZKmj3CT_M2dun_5pimNzPL6yyWfg4AQAA.zip"
+    },
+    "intel": {
+      "url": "https://downloadmirror.intel.com/926319/Intel_SGX_DCAP_for_Windows_v1.27.101.1.zip",
+      "sha256": "4926f2f46599e8f7924ab164b1b7d99280c15c8d07db14db9127dfb738582b95"
+    }
+  },
+  "files": [
+    {
+      "provider": "goodix",
+      "name": "Engine_Enclave_3.02.00.signed.dll",
+      "destination": "windows-driver-1.1.151.18/extracted/source/Engine_Enclave_3.02.00.signed.dll",
+      "sha256": "2bc1648bcc06c9f163d7c4bde62b8ecd145d22ad3941da7dd9fa4504bc3b175b",
+      "bytes": 718960
+    },
+    {
+      "provider": "goodix",
+      "name": "WBDI_Enclave.signed.dll",
+      "destination": "windows-driver-1.1.151.18/extracted/source/WBDI_Enclave.signed.dll",
+      "sha256": "8811f32411a236b28c61a0f0d9c134c42357e0dcddd71c2c324873e9219618b4",
+      "bytes": 573952
+    },
+    {
+      "provider": "goodix",
+      "name": "sgx_white_list_cert.bin",
+      "destination": "windows-driver-1.1.151.18/extracted/source/sgx_white_list_cert.bin",
+      "sha256": "fd2723344d1acf470fc231a93920bf6c2b9efe18474b3ab9247ec2960e8b9223",
+      "bytes": 632
+    },
+    {
+      "provider": "intel",
+      "name": "le.signed.dll",
+      "destination": "sgx-vm/intel/Intel_SGX_DCAP_for_Windows/psw/WindowsServer2019_Windows10/le.signed.dll",
+      "sha256": "2136ee5e9b0abfdfa0ea979131f53e4e1039dfc46eb3437c2abe92012e313b8f",
+      "bytes": 1399416
+    },
+    {
+      "provider": "intel",
+      "name": "le_prod_css.bin",
+      "destination": "sgx-vm/intel/Intel_SGX_DCAP_for_Windows/psw/WindowsServer2019_Windows10/le_prod_css.bin",
+      "sha256": "06e930b88299200f17ade4006abc592d3e724031209b91e5967a018e92363e61",
+      "bytes": 1808
+    }
+  ]
+}

@@ -1,0 +1,21 @@
+name: Offline tests
+
+on:
+  push:
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  synthetic-tests:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+      - name: Install synthetic test dependencies
+        run: sudo apt-get update && sudo apt-get install -y build-essential libpam0g-dev libssl-dev zlib1g-dev
+      - name: Test host, protocol, lifecycle, packaging and PAM semantics
+        run: python3 scripts/test.py
+      - name: Check public source contents
+        run: python3 scripts/check_publication.py
