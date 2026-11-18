@@ -2,10 +2,14 @@
 """Read only the encrypted BIOS SGX object into RAM; always unload its reader."""
 import os
 from pathlib import Path
+import shutil
 import subprocess
 
 ROOT = Path(__file__).resolve().parents[1]
 DEVICE = Path('/sys/bus/platform/devices/GXFP51B7:00')
+# Debian/Ubuntu keep insmod/rmmod in /usr/sbin, Arch in /usr/bin (usr-merged).
+INSMOD = shutil.which('insmod') or '/usr/sbin/insmod'
+RMMOD = shutil.which('rmmod') or '/usr/sbin/rmmod'
 
 
 def read_sealed_blob():
@@ -19,7 +23,7 @@ def read_sealed_blob():
             raise RuntimeError('A fingerprint probe is already loaded')
     loaded, data = False, bytearray()
     try:
-        subprocess.run(['/usr/bin/insmod', str(ROOT / 'native-probe/gxfp51b7_sealed.ko')],
+        subprocess.run([INSMOD, str(ROOT / 'native-probe/gxfp51b7_sealed.ko')],
                        check=True)
         loaded = True
         length = int(Path('/sys/module/gxfp51b7_sealed/parameters/sealed_length').read_text())
@@ -37,7 +41,7 @@ def read_sealed_blob():
     finally:
         if loaded:
             try:
-                subprocess.run(['/usr/bin/rmmod', 'gxfp51b7_sealed'], check=True)
+                subprocess.run([RMMOD, 'gxfp51b7_sealed'], check=True)
             except BaseException:
                 data[:] = b'\0' * len(data)
                 raise

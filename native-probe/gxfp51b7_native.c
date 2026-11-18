@@ -19,6 +19,7 @@
 #include <linux/platform_device.h>
 #include <linux/pci.h>
 #include <linux/utsname.h>
+#include <generated/utsrelease.h>
 #include <linux/slab.h>
 #include <linux/capability.h>
 #include <linux/fs.h>
@@ -198,15 +199,20 @@ static int prepare_mailbox_dma(struct mailbox_dma *dma)
 	unsigned int offset;
 	int ret;
 	/* The cookie prefix is private. Limit this research path to the
-	 * reviewed kernel ABI, checked in running-kernel BTF by the runner.
-	 * A production implementation needs an in-tree reserved-DMA quirk.
+	 * reviewed kernel ABI: the static_asserts below fail the build if the
+	 * struct iova_domain layout differs from the kernel this module is
+	 * compiled against, and the runner re-checks it in running-kernel BTF.
+	 * Gate on UTS_RELEASE (the build-target kernel) rather than a single
+	 * hard-coded release string, so the module runs on the kernel it was
+	 * built for. A production implementation needs an in-tree reserved-DMA
+	 * quirk.
 	 */
 	static_assert(sizeof(struct iova_domain) == 128);
 	static_assert(offsetof(struct iova_domain, granule) == 32);
 	static_assert(offsetof(struct iova_domain, start_pfn) == 40);
 	static_assert(offsetof(struct iova_domain, anchor) == 64);
 	if (!ec_pci || !iova_layout_verified ||
-	    strcmp(init_utsname()->release, "7.2.5-3-omarchy"))
+	    strcmp(init_utsname()->release, UTS_RELEASE))
 		return -EINVAL;
 	dma->domain = iommu_get_domain_for_dev(&ec_pci->dev);
 	if (!dma->domain || !iommu_is_dma_domain(dma->domain) ||

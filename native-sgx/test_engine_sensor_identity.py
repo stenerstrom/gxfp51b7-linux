@@ -250,9 +250,9 @@ class BaselineBridgeScopeTests(unittest.TestCase):
                 bridge.close()
             layout.assert_called_once()
             close.assert_called_once_with(99)
-            self.assertEqual(process.call_args_list[0].args[0][0:2], ['/usr/bin/insmod', str(module)])
+            self.assertEqual(process.call_args_list[0].args[0][0:2], [tls_bridge.INSMOD, str(module)])
             self.assertIn('capture_limit=1', process.call_args_list[0].args[0])
-            self.assertEqual(process.call_args_list[1].args[0], ['/usr/bin/rmmod', 'gxfp51b7_engine'])
+            self.assertEqual(process.call_args_list[1].args[0], [tls_bridge.RMMOD, 'gxfp51b7_engine'])
             self.assertEqual(bridge.factory_status['factory_restored_registers'], 7)
 
     def test_runner_selects_isolated_scope_only_when_explicit(self):

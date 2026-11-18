@@ -6,6 +6,7 @@ import fcntl
 import os
 import re
 from pathlib import Path
+import shutil
 import struct
 import subprocess
 import sys
@@ -13,6 +14,10 @@ import time
 import zlib
 
 ROOT = Path(__file__).resolve().parents[1]
+# Resolve the module tools via PATH; Debian/Ubuntu keep them in /usr/sbin, Arch
+# in /usr/bin (usr-merged). Fall back to the Debian location.
+INSMOD = shutil.which('insmod') or '/usr/sbin/insmod'
+RMMOD = shutil.which('rmmod') or '/usr/sbin/rmmod'
 START = 0x4701
 STATE = 0x80044702
 CAPTURE = 0x4703
@@ -179,7 +184,7 @@ class TlsBridge:
         verify_layout()
         self.report('tls_bridge_running_kernel_iova_layout_verified=1')
         try:
-            subprocess.run(['/usr/bin/insmod', str(self.module_path),
+            subprocess.run([INSMOD, str(self.module_path),
                             'run=1', 'driver_startup=1', 'observe_mailbox=1',
                             'map_mailbox=1', 'iova_layout_verified=1', 'tls_stream=1',
                             'capture_limit=' + str(self.capture_limit)], check=True)
@@ -350,7 +355,7 @@ class TlsBridge:
                                 self.factory_status.update(numeric_status_line(line.encode('ascii'), FACTORY_STATUS_FIELDS))
                         self.report(report)
                     finally:
-                        subprocess.run(['/usr/bin/rmmod', self.module_name], check=True)
+                        subprocess.run([RMMOD, self.module_name], check=True)
                         self.loaded = False
                         self.report('tls_bridge_native_module_unloaded=1')
                     if Path('/sys/bus/platform/devices/GXFP51B7:00/driver').exists() or \
